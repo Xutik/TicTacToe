@@ -1,0 +1,64 @@
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.game-container {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+    font-weight: 700;
+}
+
+h1 {
+    color: #333;
+}
+
+.controls, .opponent-select {
+    margin-bottom: 20px;
+}
+
+button {
+    margin: 0 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
+    font-weight: 700;
+    border: 2px solid #333;
+    border-radius: 5px;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+    width: 320px;
+    height: 320px;
+}
+
+.cell {
+width: 100px;
+height: 100px;
+background-color: #fff;
+border: 2px solid #333;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color;
+font-size: 40px;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.cell:hover {
+background-color: #e0e0e0;
+}
