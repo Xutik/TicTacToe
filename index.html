@@ -1,34 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Xutik's Tic-Tac-Toe</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="styles.css">
-        <title>TicTacToe</title>
-    </head>
-    <body>
-        <div class="game-container">
-            <h1>Let's play Tic-Tac-Toe!</h1>
-            <div class="controls">
-                <button id="start-game">Start Game</button>
-                <button id="cancel-game">Cancel Game</button>
-                <button id="undo-move">Undo Last Move</button>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Xutik's Tic-Tac-Toe</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+    <title>TicTacToe</title>
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>Let's play Tic-Tac-Toe!</h1>
+
+        <div class="player-setup">
+            <div>
+                <label for="player1-name">Player 1 Name:</label>
+                <input type="text" id="player1-name" value="Player 1">
+                <label for="player1-symbol">Symbol:</label>
+                <input type="text" id="player1-symbol" maxlength="1" value="X">
             </div>
-            
-            <div class="opponent-select">
-                <label>
-                    <input type="radio" name="opponent" value="player" checked> Player 2
-                </label>
-                <label>
-                    <input type="radio" name="opponent" value="computer"> Computer
-                </label>
+            <div>
+                <label for="player2-name">Player 2 Name:</label>
+                <input type="text" id="player2-name" value="Player 2">
+                <label for="player2-symbol">Symbol:</label>
+                <input type="text" id="player2-symbol" maxlength="1" value="O">
             </div>
-            <div id="game-board" class="game-board"></div>
         </div>
-        <script src="script.js"></script>
-        <script src="" async defer></script>
-    </body>
-</html>
+        <div id="game-board" class="game-board"></div>
+
+        <div class="controls">
+            <button id="start-game">Start Game</button>
+            <button id="cancel-game">Cancel Game</button>
+            <button id="undo-move">Undo Last Move</button>
+        </div>
+
+        <div class="opponent-select">
+            <label>
+                <input type="radio" name="opponent" value="player" checked> Player 2
+            </label>
+            <label>
+                <input type="radio" name="opponent" value="computer"> Computer
+            </label>
+        </div>
+
+
+    </div>
+    <script src="script.js"></script>
+    <!-- <script src="" async defer></script> -->
+</body>
+

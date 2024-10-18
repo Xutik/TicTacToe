@@ -25,6 +25,26 @@ h1 {
     margin-bottom: 20px;
 }
 
+.player-setup {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.player-setup input {
+    margin: 5px;
+    padding: 5px;
+}
+
+.player-setup input[type="text"] {
+    width: 100px;
+}
+
+.player-setup input[type="text"][maxlength="1"] {
+    width: 30px;
+}
+
 button {
     margin: 0 5px;
     padding: 10px 15px;
@@ -34,6 +54,8 @@ button {
     font-weight: 700;
     border: 2px solid #333;
     border-radius: 5px;
+    background-color: #fff;
+    transition: background-color 0.3s, transform 0.1s;
 }
 
 .game-board {
@@ -41,8 +63,18 @@ button {
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     margin-top: 20px;
+    margin-bottom: 20px;
     width: 320px;
     height: 320px;
+}
+
+button:hover {
+    background-color: #e0e0e0;
+}
+
+button:active {
+    transform: scale(0.95);
+    background-color: #d0d0d0;
 }
 
 .cell {

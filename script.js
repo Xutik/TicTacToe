@@ -16,7 +16,6 @@ const PlayerFactory = (name, symbol) => {
     };
 };
 
-
 const TicTacToe = (() => {
     let player1, player2, currentPlayer;
     let gameActive = false;
@@ -30,7 +29,6 @@ const TicTacToe = (() => {
             const cell = document.createElement('div');
             cell.classList.add('cell');
             cell.setAttribute('id', `cell-${i}`);
-            // cell.setAttribute('data-index', i);
             cell.addEventListener('click', () => handleCellClick(i));
             board.appendChild(cell);
         }
@@ -39,12 +37,11 @@ const TicTacToe = (() => {
     const handleCellClick = (index) => {
         if (!gameActive || gameState[index] !== '') return;
         
-        // gameState[index] = currentPlayer;
         gameState[index] = currentPlayer.getSymbol();
         updateCell(index);
         
         if (checkWin()) {
-            alert(`${currentPlayer} wins!`);
+            alert(${currentPlayer.getName()} wins!);
             gameActive = false;
         } else if (gameState.every(cell => cell !== '')) {
             alert("It's a draw!");
@@ -68,10 +65,10 @@ const TicTacToe = (() => {
             [0, 3, 6], [1, 4, 7], [2, 5, 8],
             [0, 4, 8], [2, 4, 6]
         ];
-
+        
         return winConditions.some(condition => {
             return condition.every(index => {
-                return gameState[index] === currentPlayer;
+                return gameState[index] === currentPlayer.getSymbol();
             });
         });
     };
@@ -88,18 +85,23 @@ const TicTacToe = (() => {
         }
     };
 
+    const switchPlayer = () => {
+    currentPlayer = currentPlayer === player1 ? player2 : player1;
+    };
+    
     const startGame = () => {
         gameActive = true;
-        player1 = PlayerFactory("Player 1", "X");
-        player2 = vsComputer ? PlayerFactory("Computer", "O") : PlayerFactory("Player 2", "O");
+        player1 = PlayerFactory(document.getElementById('player1-name').value, document.getElementById('player1-symbol').value);
+        player2 = vsComputer 
+            ? PlayerFactory("Computer", "O") 
+            : PlayerFactory(document.getElementById('player2-name').value, document.getElementById('player2-symbol').value);
         currentPlayer = player1;
         gameState = ['', '', '', '', '', '', '', '', ''];
         createGameBoard();
-        // vsComputer = document.querySelector('input[name="opponent"]:checked').value === 'computer';
-    };
-
+        
     const cancelGame = () => {
         gameActive = false;
+        gameState = ['', '', '', '', '', '', '', '', ''];
         createGameBoard();
     };
 
@@ -109,25 +111,35 @@ const TicTacToe = (() => {
         const lastMoveIndex = gameState.findLastIndex(cell => cell !== '');
         gameState[lastMoveIndex] = '';
         updateCell(lastMoveIndex);
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        switchPlayer();
     };
     
-    const resetGameState = () => {
-        gameActive = false;
-        currentPlayer = 'X';
-        gameState = ['', '', '', '', '', '', '', '', ''];
-        updateBoard();
-    };
+    // const resetGameState = () => {
+    //     gameActive = false;
+    //     currentPlayer = 'X';
+    //     gameState = ['', '', '', '', '', '', '', '', ''];
+    //     updateBoard();
+    // };
 
     const init = () => {
         createGameBoard();
         document.getElementById('start-game').addEventListener('click', startGame);
         document.getElementById('cancel-game').addEventListener('click', cancelGame);
         document.getElementById('undo-move').addEventListener('click', undoMove);
-    };
-};
 
+        document.querySelectorAll('input[name="opponent"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+            vsComputer = e.target.value === 'computer';
+                vsComputer = e.target.value === 'computer';
+                document.getElementById('player2-name').disabled = vsComputer;
+                document.getElementById('player2-symbol').disabled = vsComputer;
+            });
+    });
+}
+    init()
     return { init };
 })();
 
-TicTacToe.init();
+document.addEventListener('DOMContentLoaded', () => {
+    TicTacToe.init();
+});
