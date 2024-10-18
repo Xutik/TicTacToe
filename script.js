@@ -20,6 +20,7 @@ const TicTacToe = (() => {
     let player1, player2, currentPlayer;
     let gameActive = false;
     let gameState = ['', '', '', '', '', '', '', '', ''];
+    let moveHistory = [];
     let vsComputer = false;
 
     const createGameBoard = () => {
@@ -34,29 +35,42 @@ const TicTacToe = (() => {
         }
     };
 
+    const updatePlayerTurn = () => {
+        const turnDisplay = document.getElementById('player-turn');
+        if (turnDisplay) {
+            turnDisplay.textContent = `${currentPlayer.getName()}'s turn`;
+        }
+    };
+
     const handleCellClick = (index) => {
         if (!gameActive || gameState[index] !== '') return;
         
         gameState[index] = currentPlayer.getSymbol();
+        moveHistory.push({index, player: currentPlayer});
         updateCell(index);
         
         if (checkWin()) {
-            alert(${currentPlayer.getName()} wins!);
+            alert(`${currentPlayer.getName()} wins!`);
             gameActive = false;
         } else if (gameState.every(cell => cell !== '')) {
             alert("It's a draw!");
             gameActive = false;
         } else {
             switchPlayer();
+            updatePlayerTurn();
             if (vsComputer && currentPlayer === player2) {
-                setTimeout(computerMove, 500);
+                computerMove();
             }
         }
     };
 
     const updateCell = (index) => {
-        const cells = document.querySelectorAll('.cell');
-        cells[index].textContent = gameState[index];
+        const cell = document.getElementById(`cell-${index}`);
+        if (cell) {
+            cell.textContent = gameState[index];
+        // } else {
+        //     console.error(`Cell with id cell-${index} not found`);
+        }
     };
 
     const checkWin = () => {
@@ -65,7 +79,7 @@ const TicTacToe = (() => {
             [0, 3, 6], [1, 4, 7], [2, 5, 8],
             [0, 4, 8], [2, 4, 6]
         ];
-        
+
         return winConditions.some(condition => {
             return condition.every(index => {
                 return gameState[index] === currentPlayer.getSymbol();
@@ -86,19 +100,54 @@ const TicTacToe = (() => {
     };
 
     const switchPlayer = () => {
-    currentPlayer = currentPlayer === player1 ? player2 : player1;
+        currentPlayer = currentPlayer === player1 ? player2 : player1;
     };
-    
+
     const startGame = () => {
+        const player1Name = document.getElementById('player1-name').value;
+        let player1Symbol = document.getElementById('player1-symbol').value.charAt(0);
+    
+        if (!player1Name) {
+            alert("Please enter a name for Player 1.");
+            return;
+        }
+    
+        if (!player1Symbol) player1Symbol = 'X';
+    
+        player1 = PlayerFactory(player1Name, player1Symbol);
+    
+        if (vsComputer) {
+            player2 = PlayerFactory("Computer", player1Symbol === 'X' ? 'O' : 'X');
+        } else {
+            const player2Name = document.getElementById('player2-name').value;
+            let player2Symbol = document.getElementById('player2-symbol').value.charAt(0);
+    
+            if (!player2Name) {
+                alert("Please enter a name for Player 2.");
+                return;
+            }
+    
+            if (!player2Symbol) player2Symbol = player1Symbol === 'X' ? 'O' : 'X';
+    
+            if (player1Symbol === player2Symbol) {
+                alert("Players must have different symbols.");
+                return;
+            }
+    
+            player2 = PlayerFactory(player2Name, player2Symbol);
+        }
+    
         gameActive = true;
-        player1 = PlayerFactory(document.getElementById('player1-name').value, document.getElementById('player1-symbol').value);
-        player2 = vsComputer 
-            ? PlayerFactory("Computer", "O") 
-            : PlayerFactory(document.getElementById('player2-name').value, document.getElementById('player2-symbol').value);
         currentPlayer = player1;
         gameState = ['', '', '', '', '', '', '', '', ''];
+        moveHistory = [];
         createGameBoard();
-        
+        updatePlayerTurn();
+        console.log('Game started');
+    };
+
+
+
     const cancelGame = () => {
         gameActive = false;
         gameState = ['', '', '', '', '', '', '', '', ''];
@@ -106,38 +155,51 @@ const TicTacToe = (() => {
     };
 
     const undoMove = () => {
-        if (!gameActive || gameState.every(cell => cell === '')) return;
+        if (!gameActive || moveHistory.length === 0) return;
         
-        const lastMoveIndex = gameState.findLastIndex(cell => cell !== '');
-        gameState[lastMoveIndex] = '';
-        updateCell(lastMoveIndex);
-        switchPlayer();
+        const lastMove = moveHistory.pop();
+        gameState[lastMove.index] = '';
+        updateCell(lastMove.index);
+        currentPlayer = lastMove.player === player1 ? player2 : player1;
+        
+        if (vsComputer && moveHistory.length > 0) {
+            const computerMove = moveHistory.pop();
+            gameState[computerMove.index] = '';
+            updateCell(computerMove.index);
+        }
+        gameActive = true;
     };
-    
-    // const resetGameState = () => {
-    //     gameActive = false;
-    //     currentPlayer = 'X';
-    //     gameState = ['', '', '', '', '', '', '', '', ''];
-    //     updateBoard();
-    // };
-
     const init = () => {
         createGameBoard();
+        vsComputer = true;
+        const board = document.getElementById('game-board');
+        // if (board) {
+        // console.log('Game board found in DOM');
+        // } else {
+        // console.error('Game board not found in DOM');
+        // }
         document.getElementById('start-game').addEventListener('click', startGame);
         document.getElementById('cancel-game').addEventListener('click', cancelGame);
         document.getElementById('undo-move').addEventListener('click', undoMove);
 
+        document.querySelector('input[name="opponent"][value="computer"]').checked = true;
+        document.getElementById('player2-name').disabled = true;
+        document.getElementById('player2-symbol').disabled = true;
+
         document.querySelectorAll('input[name="opponent"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
-            vsComputer = e.target.value === 'computer';
                 vsComputer = e.target.value === 'computer';
                 document.getElementById('player2-name').disabled = vsComputer;
                 document.getElementById('player2-symbol').disabled = vsComputer;
             });
-    });
-}
-    init()
-    return { init };
+        });
+    };
+
+        return { 
+            init,
+            startGame,
+            undoMove 
+        };
 })();
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -5,7 +5,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: #15e2e9;
 }
 
 .game-container {
@@ -18,7 +18,7 @@ body {
 }
 
 h1 {
-    color: #333;
+    color: #1b0d9e;
 }
 
 .controls, .opponent-select {
@@ -52,10 +52,11 @@ button {
     cursor: pointer;
     font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
     font-weight: 700;
-    border: 2px solid #333;
+    border: 2px solid #19969b;
     border-radius: 5px;
-    background-color: #fff;
+    background-color: #b61f65;
     transition: background-color 0.3s, transform 0.1s;
+    color: white
 }
 
 .game-board {
@@ -69,28 +70,30 @@ button {
 }
 
 button:hover {
-    background-color: #e0e0e0;
+    background-color: #6e36d6;
 }
 
 button:active {
     transform: scale(0.95);
-    background-color: #d0d0d0;
+    background-color: #a2db1b;
 }
 
 .cell {
 width: 100px;
 height: 100px;
-background-color: #fff;
-border: 2px solid #333;
+background-color: #8f0b4d;
+border: 2px solid #0f51a8;
 border-radius: 5px;
 cursor: pointer;
 transition: background-color;
 font-size: 40px;
 display: flex;
 justify-content: center;
+font-size: 2em;
 align-items: center;
+color: white
 }
 
 .cell:hover {
-background-color: #e0e0e0;
+background-color: #0c7552;
 }
